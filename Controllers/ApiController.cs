@@ -1,21 +1,47 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
+using API.Interfaces;
+using API.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 
 namespace API.Controllers
 {
-    [ApiController]
     [Route("[controller]")]
+    [ApiController]
     public class ApiController : ControllerBase
     {
+        private readonly ITodoItemsService todoItemsService;
         private readonly ILogger<ApiController> _logger;
 
-        public ApiController(ILogger<ApiController> logger)
+        public ApiController(ITodoItemsService todoItemsService, ILogger<ApiController> logger)
         {
+            this.todoItemsService = todoItemsService;
             _logger = logger;
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> GetAllTodoItems()
+        {
+            var result = await todoItemsService.GetAllTodoItems();
+            return Ok(result);
+        }
+
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetTodoItem(int id)
+        {
+            var result = await todoItemsService.GetTodoItem(id);
+            if (result == null)
+            {
+                return NotFound();
+            }
+            return Ok(result);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> CreateTodoItem(TodoItemDTO todoItemDTO)
+        {
+            var result = await todoItemsService.CreateTodoItem(todoItemDTO);
+            return CreatedAtAction(nameof(GetTodoItem), new { id = result.Id }, result);
         }
     }
 }
