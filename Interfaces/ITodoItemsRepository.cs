@@ -8,7 +8,7 @@ namespace API.Interfaces
 {
     public interface ITodoItemsRepository
     {
-        Task<IEnumerable<TodoItemDTO>> GetTodoItems();
+        Task<IEnumerable<TodoItemDTO>> GetAllTodoItems();
 
         Task<TodoItemDTO> GetTodoItem(int id);
 
