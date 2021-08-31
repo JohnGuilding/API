@@ -54,5 +54,34 @@ namespace API.Repositories
                 IsComplete = todoItem.IsComplete,
             };
         }
+
+        public async Task<TodoItemDTO> UpdateTodoItem(int id, TodoItemDTO todoItemDTO)
+        {
+            var todoItem = await _context.TodoItem.FindAsync(id);
+
+            if (todoItem != null)
+            {
+                todoItem.Id = todoItemDTO.Id;
+                todoItem.Name = todoItemDTO.Name;
+                todoItem.IsComplete = todoItemDTO.IsComplete;
+
+                try
+                {
+                    await _context.SaveChangesAsync();
+
+                    return ItemToDTO(todoItem);
+                }
+                catch(DbUpdateConcurrencyException) when (!TodoItemExists(id))
+                {
+                    throw;
+                }
+            }
+            return null;
+        }
+
+        private bool TodoItemExists(int id)
+        {
+            return _context.TodoItem.Any(e => e.Id == id);
+        }
     }
 }

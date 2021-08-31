@@ -43,5 +43,23 @@ namespace API.Controllers
             var result = await todoItemsService.CreateTodoItem(todoItemDTO);
             return CreatedAtAction(nameof(GetTodoItem), new { id = result.Id }, result);
         }
+
+        [HttpPut("{id}")]
+        public async Task<IActionResult> UpdateTodoItem(int id, TodoItemDTO todoItemDTO)
+        {
+            if (id != todoItemDTO.Id)
+            {
+                return BadRequest();
+            }
+
+            var result = await todoItemsService.UpdateTodoItem(id, todoItemDTO);
+
+            if (result = null)
+            {
+                return NotFound();
+            }
+
+            return Ok(result);
+        }
     }
 }
