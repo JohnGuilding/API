@@ -79,6 +79,21 @@ namespace API.Repositories
             return null;
         }
 
+        public async Task<bool?> DeleteTodoItem(int id)
+        {
+            var todoItem = await _context.TodoItem.FindAsync(id);
+
+            if (todoItem == null)
+            {
+                return null;
+            }
+
+            _context.TodoItem.Remove(todoItem);
+            await _context.SaveChangesAsync();
+
+            return !TodoItemExists(id);
+        }
+
         private bool TodoItemExists(int id)
         {
             return _context.TodoItem.Any(e => e.Id == id);

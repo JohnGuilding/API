@@ -13,5 +13,7 @@ namespace API.Interfaces
         Task<TodoItemDTO> CreateTodoItem(TodoItemDTO todoItemDTO);
 
         Task<TodoItemDTO> UpdateTodoItem(int id, TodoItemDTO todoItemDTO);
+
+        Task<bool?> DeleteTodoItem(int id);
     }
 }

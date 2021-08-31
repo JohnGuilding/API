@@ -31,9 +31,14 @@ namespace API.Services
             return await todoItemsRepository.CreateTodoItem(todoItemDTO);
         }
 
-        public Task<TodoItemDTO> UpdateTodoItem(int id, TodoItemDTO todoItemDTO)
+        public async Task<TodoItemDTO> UpdateTodoItem(int id, TodoItemDTO todoItemDTO)
         {
             return await todoItemsRepository.UpdateTodoItem(id, todoItemDTO);
+        }
+
+        public async Task<bool?> DeleteTodoItem(int id)
+        {
+            return await todoItemsRepository.DeleteTodoItem(id);
         }
     }
 }

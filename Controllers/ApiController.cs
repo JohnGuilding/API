@@ -1,6 +1,7 @@
 ﻿using System.Threading.Tasks;
 using API.Interfaces;
 using API.Models;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 
@@ -54,12 +55,25 @@ namespace API.Controllers
 
             var result = await todoItemsService.UpdateTodoItem(id, todoItemDTO);
 
-            if (result = null)
+            if (result == null)
             {
                 return NotFound();
             }
 
             return Ok(result);
+        }
+
+        [HttpDelete]
+        public async Task<IActionResult> DeleteTodoItem(int id)
+        {
+            var result = await todoItemsService.DeleteTodoItem(id);
+
+            if (!result.HasValue)
+            {
+                return NotFound();
+            }
+
+            return result.Value ? Ok() : StatusCode(StatusCodes.Status500InternalServerError);
         }
     }
 }
